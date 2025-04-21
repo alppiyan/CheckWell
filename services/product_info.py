@@ -29,5 +29,5 @@ def fetch_from_api(barcode, base_url):
         }
     except requests.exceptions.RequestException as e:
         # Hata durumunda None döndürmek yerine loglama yapılabilir
-        print(f"API çağrısı başarısız: {e}")
+        print(f"API çağrisi başarisiz: {e}")
         return None

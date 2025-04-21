@@ -26,8 +26,8 @@ def evaluate_ingredient_risk(ingredient: str) -> list[tuple[str, str]]:
     ]
 
 def analyze_health(product: dict) -> dict:
-    ingredients = product.get("ingredients")
-    nutriscore = product.get("nutriscore_grade")
+    ingredients = product.get("ingredients", [])
+    nutriscore = product.get("nutriscore_grade", "Unknown")
 
     if not ingredients:
         return {
@@ -45,7 +45,11 @@ def analyze_health(product: dict) -> dict:
             reasons.append({"ingredient": match.strip(), "risk_level": level})
             total_risk[level] += 1
 
-    is_healthy = total_risk["high"] == 0 and total_risk["medium"] <= 1
+    is_healthy = (
+        total_risk["high"] == 0
+        and total_risk["medium"] <= 1
+        and nutriscore in ["A", "B"]
+    )
 
     return {
         "is_healthy": is_healthy,
