@@ -31,10 +31,7 @@ def analyze_health(product: dict) -> dict:
 
     if not ingredients:
         return {
-            "is_healthy": False,
-            "risk_summary": {"high": 0, "medium": 0, "low": 0},
-            "flagged_ingredients": [],
-            "nutriscore_grade": nutriscore
+            "error": "Ürün içeriği bulunamadı."
         }
 
     total_risk = {"high": 0, "medium": 0, "low": 0}
