@@ -31,7 +31,7 @@ def analyze_health(product: dict) -> dict:
 
     if not ingredients:
         return {
-            "error": "Ürün içeriği bulunamadı."
+            "error": "\u00dcr\u00fcn i\u00e7eri\u011fi bulunamad\u0131."
         }
 
     total_risk = {"high": 0, "medium": 0, "low": 0}
@@ -42,14 +42,31 @@ def analyze_health(product: dict) -> dict:
             reasons.append({"ingredient": match.strip(), "risk_level": level})
             total_risk[level] += 1
 
-    is_healthy = (
-        total_risk["high"] == 0
-        and total_risk["medium"] <= 1
-        and nutriscore in ["A", "B"]
-    )
+    total_flagged = total_risk["high"] + total_risk["medium"] + total_risk["low"]
+
+    if total_flagged == 0:
+        return {
+            "message": "Riskli bileşen bulunamadı.",
+            "risk_summary": total_risk,
+            "flagged_ingredients": reasons,
+            "nutriscore_grade": nutriscore
+        }
+
+    total_ingredients = len(ingredients)
+    total_score = total_risk["high"] * 3 + total_risk["medium"] * 2 + total_risk["low"] * 1
+    max_score = total_ingredients * 3
+    health_score = 100 - int((total_score / max_score) * 100) if max_score else 0
+
+    if health_score >= 80:
+        health_label = "Sağlıklı"
+    elif health_score >= 50:
+        health_label = "Dikkatli Kullanım"
+    else:
+        health_label = "Riskli"
 
     return {
-        "is_healthy": is_healthy,
+        "health_score": health_score,
+        "health_label": health_label,
         "risk_summary": total_risk,
         "flagged_ingredients": reasons,
         "nutriscore_grade": nutriscore
