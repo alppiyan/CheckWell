@@ -45,7 +45,7 @@ def analyze_health(product: dict) -> dict:
     total_flagged = total_risk["high"] + total_risk["medium"] + total_risk["low"]
 
     if total_flagged == 0:
-        return {
+        return {    
             "message": "Riskli bileşen bulunamadı.",
             "risk_summary": total_risk,
             "flagged_ingredients": reasons,
